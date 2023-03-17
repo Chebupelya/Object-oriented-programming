@@ -55,7 +55,7 @@ namespace WinFormsApp1
                 "\nПроизводитель: " + CPU_Producer.Text +
                 "\nСерия: " + CPU_Series.Text +
                 "\nМодель: " + CPU_Model.Text +
-                "\nЧастота:" + CPU_Frequency.Text +
+                "\nЧастота: " + CPU_Frequency.Text +
                 "\nМакс. частота: " + CPU_Frequency.Text +
                 "\nКол-во ядер: " + maskedTextBox1.Text +
                 "\nРазрядность процессора: " + CPU_Architecture.Text;

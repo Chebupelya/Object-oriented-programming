@@ -160,7 +160,7 @@
                 "\nПроизводитель: " + VC_Producer.Text +
                 "\nСерия: " + VC_Series.Text +
                 "\nМодель: " + VC_Model.Text +
-                "\nЧастота:" + VC_Frequency.Text +
+                "\nЧастота: " + VC_Frequency.Text +
                 "\nПоддержка DirectX11: " + VC_DirectX11_Support.Text +
                 "\nПамять: " + VC_Memory.Value + " GB";
         }
