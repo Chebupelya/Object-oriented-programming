@@ -152,7 +152,6 @@ namespace Winf_FillingObject_File_ShittyValidation
             using (FileStream fs = new FileStream("ShopStore.xml", FileMode.OpenOrCreate))
             {
                 
-
                 if (fs.Length > 0)
                 {
                     GetSetBufferShopTemplates = (List<ShopTemplate>)xmlFormatter.ReadObject(fs);

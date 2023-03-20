@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
+
         public Computer comp;
         public Processor proc;
         public Videocard vc;
@@ -14,6 +16,8 @@ namespace WinFormsApp1
         Form3 form3;
         Form4 form4;
         Form5 form5;
+        Form6 form6;
+        Form7 form7;
         public int cost = 0;
         Random rand = new Random();
 
@@ -30,6 +34,8 @@ namespace WinFormsApp1
             RAM_Memory.DropDownStyle = ComboBoxStyle.DropDownList;
             HD_Memory.Enabled = false;
             HD_Memory.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            сохранитьToolStripMenuItem.Enabled = false;
 
             DataContractSerializer xmlFormatter = new DataContractSerializer(typeof(List<Computer>));
             using (FileStream fs = new FileStream("IT-Laboratory.xml", FileMode.Open))
@@ -112,11 +118,9 @@ namespace WinFormsApp1
         }
 
         public List<Computer> GetSetBufferComputers = new List<Computer>();
-
-        public List<Computer> Vpered = new List<Computer>();
-        public List<Computer> Nazad = new List<Computer>();
         private void addToLab_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabel4.Text = "Добавить в лабораторию";
             try
             {
                 comp.videocard = form2.GetVideocard();
@@ -135,54 +139,70 @@ namespace WinFormsApp1
                 MessageBox.Show("Заполните данные о процессоре!");
                 return;
             }
+
             try
             {
-                if (computer_type.Text == "" || RAM_Memory.Text == "" || HD_Memory.Text == "" || listBox1.Text == "" || listBox2.Text == "")
+                comp.computer_type = computer_type.Text;
+                if (MB_RAM.Checked)
                 {
-                    throw new Exception();
+                    comp.ram_memory = RAM_Memory.Text + " MB";
+                }
+                else if (GB_RAM.Checked)
+                {
+                    comp.ram_memory = RAM_Memory.Text + " GB";
                 }
                 else
                 {
-                    comp.computer_type = computer_type.Text;
-                    if (MB_RAM.Checked)
-                    {
-                        comp.ram_memory = RAM_Memory.Text + " MB";
-                    }
-                    else if (GB_RAM.Checked)
-                    {
-                        comp.ram_memory = RAM_Memory.Text + " GB";
-                    }
-                    else
-                    {
-                        throw new Exception();
-                    }
-                    if (HD_MB.Checked)
-                    {
-                        comp.hd_memory = HD_Memory.Text + " MB";
-                    }
-                    else if (HD_GB.Checked)
-                    {
-                        comp.hd_memory = HD_Memory.Text + " GB";
-                    }
-                    else
-                    {
-                        throw new Exception();
-                    }
-                    comp.ram_type = listBox1.Text;
-                    comp.hd_type = listBox2.Text;
-                    comp.purchase_date = dateTimePicker1.Value;
-                    comp.cost_comp = rand.Next(800, 2000);
+                    throw new Exception();
                 }
+                if (HD_MB.Checked)
+                {
+                    comp.hd_memory = HD_Memory.Text + " MB";
+                }
+                else if (HD_GB.Checked)
+                {
+                    comp.hd_memory = HD_Memory.Text + " GB";
+                }
+                else
+                {
+                    throw new Exception();
+                }
+                comp.ram_type = listBox1.Text;
+                comp.hd_type = listBox2.Text;
+                comp.purchase_date = dateTimePicker1.Value;
+                comp.cost_comp = rand.Next(800, 2000);
+
+                var results = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(comp, new ValidationContext(comp), results, true))
+                {
+                    foreach (var error in results)
+                    {
+                        MessageBox.Show(error.ErrorMessage);
+                    }
+
+                    return;
+                }
+                if (results.Count != 0)
+                {
+                    throw new Exception();
+                }
+
+                //if (computer_type.Text == "" || RAM_Memory.Text == "" || HD_Memory.Text == "" || listBox1.Text == "" || listBox2.Text == "")
+                //{
+                //    throw new Exception();
+                //}
+                //else
+                //{
+                //}
             }
             catch
             {
-                MessageBox.Show("Заполните все поля!");
+                //MessageBox.Show("Заполните все поля!");
                 return;
             }
 
             try
             {
-
                 GetSetBufferComputers.Add(comp);
                 toolStripStatusLabel2.Text = GetSetBufferComputers.Count().ToString();
             }
@@ -230,6 +250,7 @@ namespace WinFormsApp1
 
         private void Lab_Compand_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabel4.Text = "Состав лаборатории";
             DataContractSerializer xmlFormatter = new DataContractSerializer(typeof(List<Computer>));
             using (FileStream fs = new FileStream("IT-Laboratory.xml", FileMode.Open))
             {
@@ -242,6 +263,7 @@ namespace WinFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabel4.Text = "Рассчет стоимости лаборатории";
             foreach (var i in GetSetBufferComputers)
             {
                 cost += i.cost_comp;
@@ -261,6 +283,7 @@ namespace WinFormsApp1
             {
                 xmlFormatter.WriteObject(fs, OrderedComputers);
             }
+            toolStripStatusLabel4.Text = сохранитьToolStripMenuItem.Text;
             MessageBox.Show("Сохранено.");
         }
 
@@ -323,7 +346,7 @@ namespace WinFormsApp1
                 xmlFormatter.WriteObject(fs, GetSetBufferComputers);
             }
             toolStripStatusLabel2.Text = GetSetBufferComputers.Count().ToString();
-            if(GetSetBufferComputers.Count() == 1)
+            if (GetSetBufferComputers.Count() == 1)
             {
                 toolStripButton6.Enabled = false;
                 toolStripButton5.Enabled = false;
@@ -382,7 +405,7 @@ namespace WinFormsApp1
                 counter_of_comp++;
             }
             MessageBox.Show(
-                "\t\t" + (counter_of_comp+1) +
+                "\t\t" + (counter_of_comp + 1) +
                     "\r\n============================" +
                     "\r\nТип компьютера: " + GetSetBufferComputers.ElementAt(counter_of_comp).computer_type +
                     "\r\nРазмер озу: " + GetSetBufferComputers.ElementAt(counter_of_comp).ram_memory +
@@ -423,27 +446,31 @@ namespace WinFormsApp1
             toolStripStatusLabel6.Text = DateTime.Now.ToString();
         }
 
-        List<Computer> OrderedComputers;
+        List<Computer> OrderedComputers = new List<Computer>();
         private void поToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = сортировкаToolStripMenuItem.Text + " " + поToolStripMenuItem.Text;
             OrderedComputers = GetSetBufferComputers.OrderBy(p => p.processor.frequency).ToList();
+            сохранитьToolStripMenuItem.Enabled = true;
         }
 
         private void поРазмеруОЗУToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = сортировкаToolStripMenuItem.Text + " " + поРазмеруОЗУToolStripMenuItem.Text;
-            OrderedComputers = GetSetBufferComputers.OrderByDescending(p => p.ram_memory).ToList();
+            OrderedComputers = GetSetBufferComputers.OrderBy(p => Convert.ToInt32(p.ram_memory.Substring(0, 2).Trim())).ToList();
+            сохранитьToolStripMenuItem.Enabled = true;
         }
         private void поЧастотеПроцессораToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = сортировкаToolStripMenuItem.Text + " " + поToolStripMenuItem.Text;
             OrderedComputers = GetSetBufferComputers.OrderBy(p => p.processor.frequency).ToList();
+            сохранитьToolStripMenuItem.Enabled = true;
         }
         private void поРазмеруОЗУToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = сортировкаToolStripMenuItem.Text + " " + поРазмеруОЗУToolStripMenuItem.Text;
-            OrderedComputers = GetSetBufferComputers.OrderByDescending(p => p.ram_memory).ToList();
+            OrderedComputers = GetSetBufferComputers.OrderBy(p => Convert.ToInt32(p.ram_memory.Substring(0, 2).Trim())).ToList();
+            сохранитьToolStripMenuItem.Enabled = true;
         }
 
         private void поПроизводителюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -456,25 +483,37 @@ namespace WinFormsApp1
         private void поМоделиПроцессораToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + поМоделиПроцессораToolStripMenuItem.Text;
+            form6 = new Form6(GetSetBufferComputers);
+            form6.Show();
         }
 
         private void комбинированныйToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            form7 = new Form7(GetSetBufferComputers);
+            form7.Show();
             toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + комбинированныйToolStripMenuItem.Text;
         }
 
         private void поПроизводителюToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + поПроизводителюToolStripMenuItem.Text;
+            form5 = new Form5(GetSetBufferComputers);
+            form5.Show();
+            toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + поПроизводителюToolStripMenuItem.Text;
         }
 
         private void поМоделиПроцессораToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + поМоделиПроцессораToolStripMenuItem.Text;
+            form6 = new Form6(GetSetBufferComputers);
+            form6.Show();
+            toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + поМоделиПроцессораToolStripMenuItem.Text;
         }
 
         private void комбинированныйToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            form7 = new Form7(GetSetBufferComputers);
+            form7.Show();
             toolStripStatusLabel4.Text = поискToolStripMenuItem.Text + " " + комбинированныйToolStripMenuItem.Text;
         }
     }

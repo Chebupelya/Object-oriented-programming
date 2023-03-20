@@ -22,11 +22,11 @@ namespace WinFormsApp1
                     "\t\t" + ++counter +
                     "\r\n============================" +
                     "\r\nТип компьютера: " + i.computer_type +
-                    "\r\nРазмер озу: " + i.ram_memory +
-                    "\r\nТип озу: " + i.ram_type +
-                    "\r\nРазмер жд: " + i.hd_memory +
-                    "\r\nТип жд: " + i.hd_type +
-                    "\r\n[Процессор]" +
+                    "\r\nРазмер ОЗУ: " + i.ram_memory +
+                    "\r\nТип ОЗУ: " + i.ram_type +
+                    "\r\nРазмер ЖД: " + i.hd_memory +
+                    "\r\nТип ЖД: " + i.hd_type +
+                    "\r\n[ПРОЦЕССОР]" +
                     "\r\nПроизводитель: " + i.processor.producer +
                     "\r\nСерия: " + i.processor.series +
                     "\r\nМодель: " + i.processor.model +
@@ -34,12 +34,12 @@ namespace WinFormsApp1
                     "\r\nМакс. частота: " + i.processor.max_frequency +
                     "\r\nКол-во ядер: " + i.processor.cores_amount +
                     "\r\nРазрядность процессора: " + i.processor.cpu_architecture +
-                    "\r\n[Видеокарта]" +
+                    "\r\n[ВИДЕОКАРТА]" +
                     "\r\nПроизводитель: " + i.videocard.producer +
                     "\r\nСерия: " + i.videocard.series +
                     "\r\nМодель: " + i.videocard.model +
                     "\r\nЧастота: " + i.videocard.frequency +
-                    "\r\nПоддержка directx11: " + i.videocard.support_directx11 +
+                    "\r\nПоддержка DirectX11: " + i.videocard.support_directx11 +
                     "\r\nПамять: " + i.videocard.vc_memory + " GB" +
                     "\r\nДата приобретения: " + i.purchase_date +
                     "\r\nСтоимость: " + i.cost_comp + "$\r\n" +

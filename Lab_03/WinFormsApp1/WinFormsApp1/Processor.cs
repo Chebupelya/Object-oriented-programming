@@ -15,7 +15,8 @@ namespace WinFormsApp1
         [DataMember]
         public int series;
         [DataMember]
-        public string model;
+        [ProcessorValidation]
+        public string model { get; set; }
         [DataMember]
         public int frequency;
         [DataMember]

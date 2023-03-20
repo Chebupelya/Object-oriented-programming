@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -37,6 +38,16 @@ namespace WinFormsApp1
                         Convert.ToInt32(maskedTextBox1.Text),
                         CPU_Architecture.Text
                     );
+                    var results = new List<ValidationResult>();
+                    if (!Validator.TryValidateObject(proc, new ValidationContext(proc), results, true))
+                    {
+                        foreach (var error in results)
+                        {
+                            MessageBox.Show(error.ErrorMessage);
+                        }
+
+                        return;
+                    }
                     Hide();
                 }
                 catch

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -11,22 +13,28 @@ namespace WinFormsApp1
     public class Computer
     {
         [DataMember]
+        [ProcessorValidation]
         public Processor processor;
         [DataMember]
         public Videocard videocard;
         [DataMember]
-        public string computer_type;
+        [Required(ErrorMessage = "Отсутствует тип компьютера.")]
+        public string computer_type { get; set; }
         [DataMember]
-        public string ram_memory;
+        [Required(ErrorMessage = "Отсутствует память ОЗУ.")]
+        public string ram_memory { get; set; }
         [DataMember]
-        public string hd_memory;
+        [Required(ErrorMessage = "Отсутствует память ЖД.")]
+        public string hd_memory { get; set; }
         [DataMember]
-        public string ram_type;
+        [Required(ErrorMessage = "Отсутствует тип ОЗУ.")]
+        public string ram_type { get; set; }
         [DataMember]
-        public string hd_type;
+        [Required(ErrorMessage = "Отсутствует тип ЖД.")]
+        public string hd_type { get; set; }
         [DataMember]
         public DateTime purchase_date;
         [DataMember]
-        public int cost_comp;
+        public int cost_comp { get; set; }
     }
 }
